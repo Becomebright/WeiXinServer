@@ -17,7 +17,7 @@ class LoginForm(FlaskForm):
         validators=[DataRequired('请输入用户名')],
         description="用户名",
         render_kw={
-            "class":"form-control",
+            # "class":"form-control",
             "placeholder":"请输入账号!",
             "required":'required'               #表示输入框不能为空，并有提示信息
         }
@@ -27,7 +27,7 @@ class LoginForm(FlaskForm):
         validators=[DataRequired('请输入密码')],
         description='密码',
         render_kw={
-            "class": "form-control",
+            # "class": "form-control",
             "placeholder": "请输入密码!",
             "required": 'required'  # 表示输入框不能为空
         }
@@ -40,6 +40,6 @@ class LoginForm(FlaskForm):
     submit = SubmitField(
         label='submit',
         render_kw={
-            'class': 'btn btn-primary'
+            # 'class': 'btn btn-primary'
         }
     )
