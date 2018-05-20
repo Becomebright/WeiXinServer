@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>会议管理</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.js" rel="stylesheet">
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	  <style type="text/css">
+		  .table tbody tr td{
+            vertical-align: middle;
+			overflow: hidden;
+        }
+		  th{
+              text-align: center;
+        }
+
+	  </style>
+  </head>
+  <body>
+  	<div class="container">
+  		<div class="page-header">
+  			{% if user %}
+			<h1>Hello, {{user.username}}! <small>发布、管理您的会议</small></h1>
+			{% else %}
+			<h1>Hello! <small>发布、管理您的会议</small></h1>
+			{% endif %}
+		</div>
+
+		<ul class="nav nav-tabs">
+			<li role="presentation" id="/index"><a href="index">Home</a></li>
+			<li role="presentation" id="/add_conference"><a href="add_conference">发布会议</a></li>
+			<li role="presentation" id="/previewlist"><a href="previewlist">预览</a></li>
+			<li role="presentation"><a href="#">Others</a></li>
+			{% if tag %}
+			<!-- 获取当前页面路径，设置标签页active -->
+			<script type="text/javascript">
+				var test = window.location.pathname;
+				document.getElementById(test).setAttribute("class","active");
+			</script>
+			{% endif %}
+		</ul>
+
+		{% block content %}{% endblock %}
+	</div>
+
+
+  </body>
+</html>

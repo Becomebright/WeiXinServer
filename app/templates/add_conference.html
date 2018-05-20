@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+    <br><br>
+    <form name="addConference" action="" method="post">
+        {{form.hidden_tag() }}
+        <p>
+            会议名称: {{form.name(size=48)}}<br><br>
+        </p>
+        <p>
+            会议时间: {{form.date}} &nbsp;&nbsp;&nbsp;&nbsp;  <em>格式：<mark>yyyy-mm-dd hh:mm:ss</mark></em>
+            <br><br>
+        </p>
+        <p>
+            会议地点: {{form.place(size=48)}}<br><br>
+        </p>
+        <p>
+            <input type="submit" name="提交">
+        </p>
+    </form>
+{% endblock %}
