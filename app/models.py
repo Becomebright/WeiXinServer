@@ -7,7 +7,7 @@ from app import db
 # db.session.add(s)
 
 # 用户user参加的会议:
-# user.classes.all()
+# user.conferences.all()
 
 # 参加了会议c的用户:
 # c.User.all()
@@ -19,7 +19,9 @@ from app import db
 Enroll = db.Table(
     'Enroll',
     db.Column('user_id', db.Integer, db.ForeignKey('User.id')),
-    db.Column('conference_id', db.Integer, db.ForeignKey('Conference.id'))
+    db.Column('conference_id', db.Integer, db.ForeignKey('Conference.id')),
+    db.Column('time', db.DateTime),
+    db.Column('status', db.Integer)  # 报名状态：0-审核中, 1-审核通过
 )
 
 
@@ -95,8 +97,8 @@ class Conference(db.Model):
 
     name = db.Column(db.String(64), index=True)     	# 会议名称
     date = db.Column(db.DateTime, index=True)       	# 会议开始时间
-    time = db.Column(db.Time)                       	# 会议持续时间
-    place = db.Column(db.String(64))    	# 会议地点
+    duration = db.Column(db.Interval)                   # 会议持续时间
+    place = db.Column(db.String(64))    	            # 会议地点
     introduction = db.Column(db.String(1024))       	# 会议简介
     host = db.Column(db.String(32))                 	# 会议主持人
     guest_intro = db.Column(db.String(1024))        	# 嘉宾介绍
@@ -113,7 +115,7 @@ class Conference(db.Model):
             'id': self.id,
             'name': self.name,
             'date': self.date,
-            'time': self.time,
+            'duration': self.duration,
             'place': self.place,
             'introduction': self.introduction,
             'host': self.host,
@@ -126,7 +128,7 @@ class Conference(db.Model):
 
     # 获取会议结束时间
     def get_end_time(self):
-        return self.date + self.time #?
+        return self.date + self.duration
 
 
 class Document(db.Model):
