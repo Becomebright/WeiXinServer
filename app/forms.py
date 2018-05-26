@@ -7,8 +7,13 @@ class AddConferenceForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
     date = DateTimeField('date', validators=[DataRequired()])
     place = StringField('place', validators=[DataRequired()])
+    duration = DateTimeField('duration', validators=[DataRequired()])
+    introduction = StringField('introduction',validators=[DataRequired()])
+    host = StringField('host',validators=[DataRequired()])
+    guest_intro = StringField('guest_intro',validators=[DataRequired()])
+    remark = StringField('remark',validators=[DataRequired()])
 
-    submit = SubmitField('submit')
+    submit = SubmitField('提交')
 
 
 class LoginForm(FlaskForm):
@@ -17,7 +22,7 @@ class LoginForm(FlaskForm):
         validators=[DataRequired('请输入用户名')],
         description="用户名",
         render_kw={
-            "class":"form-control",
+            # "class":"form-control",
             "placeholder":"请输入账号!",
             "required":'required'               #表示输入框不能为空，并有提示信息
         }
@@ -27,7 +32,7 @@ class LoginForm(FlaskForm):
         validators=[DataRequired('请输入密码')],
         description='密码',
         render_kw={
-            "class": "form-control",
+            # "class": "form-control",
             "placeholder": "请输入密码!",
             "required": 'required'  # 表示输入框不能为空
         }
@@ -40,6 +45,6 @@ class LoginForm(FlaskForm):
     submit = SubmitField(
         label='submit',
         render_kw={
-            'class': 'btn btn-primary'
+            # 'class': 'btn btn-primary'
         }
     )

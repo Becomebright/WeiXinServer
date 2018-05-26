@@ -88,6 +88,7 @@ def login_required(func):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    tag = {'name': 'login'}
     form = LoginForm()
     if form.validate_on_submit():
         username = form.username.data
@@ -102,7 +103,7 @@ def login():
         session['user'] = username  # 匹配成功，添加session
         login_user(user, form.remember_me.data)
         return redirect(request.args.get('next') or url_for('index'))  # 重定向到首页
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, tag=tag)
 
 
 # @app.route("/logout")

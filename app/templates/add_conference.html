@@ -11,10 +11,26 @@
             <br><br>
         </p>
         <p>
+            会议时长: {{form.duration}} &nbsp;&nbsp;&nbsp;&nbsp;  <em>格式：<mark> hh:mm:ss</mark></em>
+            <br><br>
+        </p>
+        <p>
             会议地点: {{form.place(size=48)}}<br><br>
         </p>
         <p>
-            <input type="submit" name="提交">
+            会议简介: {{form.introduction(size=48)}}<br><br>
+        </p>
+        <p>
+            会议主持: {{form.host(size=48)}}<br><br>
+        </p>
+        <p>
+            会议嘉宾: {{form.guest_intro(size=48)}}<br><br>
+        </p>
+        <p>
+            会议备注: {{form.remark(size=48)}}<br><br>
+        </p>
+        <p>
+            {{form.submit}}
         </p>
     </form>
 {% endblock %}
