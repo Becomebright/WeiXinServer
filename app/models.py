@@ -122,7 +122,7 @@ class Conference(db.Model):
             'guest_intro': self.guest_intro,
             'remark': self.remark,
             'status': self.status,
-            'create_time': self.get_end_time(),
+            'create_time': self.create_time,
             'documents': self.documents
         }
 
