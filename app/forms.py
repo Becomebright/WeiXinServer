@@ -7,7 +7,7 @@ class AddConferenceForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
     date = DateTimeField('date', validators=[DataRequired()])
     place = StringField('place', validators=[DataRequired()])
-    duration = DateTimeField('duration', validators=[DataRequired()])
+    duration = StringField('duration', validators=[DataRequired()])
     introduction = StringField('introduction',validators=[DataRequired()])
     host = StringField('host',validators=[DataRequired()])
     guest_intro = StringField('guest_intro',validators=[DataRequired()])

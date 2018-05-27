@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import datetime
 from functools import wraps
 from urllib.parse import urlparse, urljoin
 from flask import render_template, redirect, url_for, flash, request, abort, session
@@ -29,14 +30,33 @@ def add_conference():
         user = current_user
     tag = {'name': 'add_conference'}
     if form.validate_on_submit():
+        admin_id = user.id
         name = form.name.data
         date = form.date.data
         place = form.place.data
 
-        conference = Conference(name=name, date=date, place=place)
+        duration = form.duration.data
+        duration = datetime.datetime.strptime(duration, '%H:%M:%S')
+        hour = duration.hour
+        minute = duration.minute
+        second = duration.second
+        duration = datetime.timedelta(hours=hour, minutes=minute, seconds=second)
+
+        introduction = form.introduction.data
+        host = form.host.data
+        guest_intro = form.guest_intro.data
+        remark = form.remark.data
+        status = "未审核"
+        create_time = datetime.datetime.today()
+
+        conference = Conference(admin_id=admin_id, name=name, date=date, place=place, duration=duration,
+                                introduction=introduction, host=host, guest_intro=guest_intro, remark=remark,
+                                status=status, create_time=create_time)
+        print(conference.to_dict())
         db.session.add(conference)
         db.session.commit()
-    return render_template('add_conference.html', user=user, form=form, tag=tag)
+        return render_template('add_conference.html', user=user, tag=tag, is_success=True)
+    return render_template('add_conference.html', user=user, form=form, tag=tag, is_success=False)
 
 
 @app.route('/previewlist')
