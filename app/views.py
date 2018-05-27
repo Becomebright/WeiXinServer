@@ -105,7 +105,6 @@ def login():
         return redirect(request.args.get('next') or url_for('index'))  # 重定向到首页
     return render_template('login.html', form=form, tag=tag)
 
-
 # @app.route("/logout")
 # @login_required
 # def logout():
