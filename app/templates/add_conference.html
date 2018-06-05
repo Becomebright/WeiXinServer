@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <br><br>
+    {% if not is_success %}
     <form name="addConference" action="" method="post">
         {{form.hidden_tag() }}
         <p>
@@ -31,7 +32,9 @@
         </p>
         <p>
             {{form.submit}}
-            {{ form.csrf_token }}
         </p>
     </form>
+    {% else %}
+    <h3>会议发布成功！</h3>
+    {% endif %}
 {% endblock %}

@@ -1,42 +1,112 @@
 {% extends "base.html" %}
 {% block content %}
-    <br><br>
     <p>
         <!-- 会议名称作标题 -->
-        <table class="table table-bordered">
-            <thead>
-                    <tr style="background-color: whitesmoke" align="center">
-                        <th width="70">会议名称</th>
-                        <th width="50">会议地点</th>
-                        <th width="50">会议开始时间</th>
-                        <th width="40">会议时长</th>
-                        <th width="40">会议状态</th>
-                        <th width="70">会议嘉宾</th>
-                        <th width="50">详细内容</th>
-                        <th width="50">报名审核</th>
-                    </tr>
-            </thead>
-            <tbody>
-            {% for conference in conferences %}
-                <tr align="center">
-                    <td>{{conference.name}}</td>
-                    <td>{{ conference.place }}</td>
-                    <td>{{ conference.date }}</td>
-                    <td>{{ conference.duration }}</td>
-                    <td>{{ conference.status }}</td>
-                    <td>{{ conference.guest_intro }}</td>
-                    <td><a href="preview.html">详细信息</a></td>
-                    <td><a href="examine.html">审核</a></td>
-                </tr>
-            {% endfor %}
-
-            </tbody>
+        <table width="100%">
+            <tr align="center">
+                <td>
+                    <table  width="60%">
+                        <thead>
+                            <tr>
+                                <th><h1>{{ conference.name }}</h1></th>
+                                <!--会议名称-->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {% if conference.introduction %}
+                                <td><h4>&bull;会议简介：{{ conference.introduction }}</h4></td>
+                                <!--会议简介-->
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                {% if conference.host %}
+                                <td><h4>&bull;主持人：{{conference.host}}</h4></td>
+                                <!--嘉宾介绍-->
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                {% if conference.guest_intro %}
+                                <td><h4>&bull;嘉宾介绍：{{conference.guest_intr}}</h4></td>
+                                <!--嘉宾介绍-->
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td><h4>&bull;会议时间：{{ conference.date }}</h4></td>
+                                <!--会议时间-->
+                            </tr>
+                            <tr>
+                                <td><h4>&bull;会议时长：{{ conference.duration }}</h4></td>
+                                <!--会议时长-->
+                            </tr>
+                            <tr>
+                                <td><h4>&bull;会议地点：{{ conference.place }}</h4></td>
+                                <!--会议地点-->
+                            </tr>
+                            <tr>
+                                <td><h4>&bull;会议状态：{{ conference.status }}</h4></td>
+                                <!--会议状态-->
+                            </tr>
+                            <tr>
+                                {% if conference.remark %}
+                                <td><h4>&bull;备注：{{ conference.remark }}</h4></td>
+                                <!--备注信息-->
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <table class="table table-striped" align="center">
+                                    <tr>
+                                        <td align="center" width="200px" height="70px">
+                                            报名人员
+                                        </td>
+                                        <td align="center" width="200px" height="70px">
+                                            允许参会
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" width="200px">
+                                            JZR
+                                        </td>
+                                        <td align="center" width="200px">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox">
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" width="200px">
+                                            JZR
+                                        </td>
+                                        <td align="center" width="200px">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox">
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" width="200px">
+                                            JZR
+                                        </td>
+                                        <td align="center" width="200px">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox">
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
         </table>
-{#    {% for conference in conferences %}#}
-{#                <p>{{conference.name}} </p>#}
-{#    {% endfor %}#}
-    </p>
-    <p>
 
     </p>
+
 {% endblock %}

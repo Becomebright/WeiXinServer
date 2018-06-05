@@ -11,7 +11,6 @@
                         <th width="50">会议开始时间</th>
                         <th width="40">会议时长</th>
                         <th width="40">会议状态</th>
-                        <th width="70">会议嘉宾</th>
                         <th width="50">详细内容</th>
                         <th width="50">报名审核</th>
                     </tr>
@@ -24,9 +23,8 @@
                     <td>{{ conference.date }}</td>
                     <td>{{ conference.duration }}</td>
                     <td>{{ conference.status }}</td>
-                    <td>{{ conference.guest_intro }}</td>
                     <td><a href="preview">详细信息</a></td>
-                    <td><a href="preview">审核</a></td>
+                    <td><a href="examine.html">审核</a></td>
                 </tr>
             {% endfor %}
 

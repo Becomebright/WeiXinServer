@@ -71,6 +71,19 @@ def previewlist():
     return render_template('previewlist.html', user=user, tag=tag, conferences=conferences)
 
 
+@app.route('/examine')
+@login_required
+def examine():
+    if current_user.is_anonymous:
+        user = None
+    else:
+        user = current_user
+    tag = {'name': 'examine'}
+    conference = Conference.query.get(1)
+    return render_template('examine.html', user=user, tag=tag, conference=conference)
+
+
+
 @app.route('/preview')
 @login_required
 def preview():
