@@ -2,7 +2,7 @@
 import datetime
 from functools import wraps
 from urllib.parse import urlparse, urljoin
-from flask import render_template, redirect, url_for, flash, request, abort, session
+from flask import render_template, redirect, url_for, flash, request, abort, session, jsonify
 from flask_login import login_required, login_user, current_user
 
 from app import app, login_manager
@@ -20,7 +20,7 @@ def index():
     return render_template("index.html", user=user, tag=tag)
 
 
-@app.route('/add_conference', methods = ['GET', 'POST'])
+@app.route('/add_conference', methods=['GET', 'POST'])
 @login_required
 def add_conference():
     form = AddConferenceForm()
@@ -103,6 +103,7 @@ def login_required(func):
             return func(*args, **kwargs)
         else:
             return redirect(url_for('admin.login'))
+
     return decorated_function
 
 
@@ -131,3 +132,69 @@ def login():
 # def logout():
 #     logout_user()p
 #     return redirect(somewhere)
+
+
+def get_conf_dict(conf, user):
+    conf_dict = conf.to_dict()
+    isJoin = False
+    for u in conf.users.all():
+        if u.id == user.id:
+            isJoin = True
+    conf_dict['isJoin'] = isJoin
+    conf_dict['num'] = conf.get_num()
+    return conf_dict
+
+
+@app.route('/get_conferences', methods=['POST'])
+def get_conferences():
+    print(request.get_data())
+    if not request.json or 'username' not in request.json:
+        print('not json')
+        abort(400)
+    username = request.json['username']
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        return
+    conferences = Conference.query.all()
+    confs_dict = []
+    for conf in conferences:
+        conf_dict = get_conf_dict(conf, user)
+        confs_dict.append(conf_dict)
+    print(confs_dict)
+    return jsonify(confs_dict)
+
+
+@app.route('/get_conference_detail', methods=['POST'])
+def get_conference_detail():
+    print(request.get_data())
+    if not request.json or 'username' not in request.json:
+        print('not json')
+        abort(400)
+    username = request.json['username']
+    conference_id = request.json['conference_id']
+    user = User.query.filter_by(username=username).first()
+    conference = Conference.query.get(int(conference_id))
+    if user is None or conference is None:
+        return
+    return jsonify(get_conf_dict(conference, user))
+
+
+@app.route('/get_user_info', methods=['GET, POST'])
+def get_user_info():
+    print(request.get_data())
+    if not request.json or 'username' not in request.json:
+        abort(400)
+    username = request.json['username']
+    user = User.query.filter_by(username=username).first()
+    return jsonify(user.to_dict())
+
+
+@app.route('/enroll', methods=['GET, POST'])
+def enroll():
+    print(request.get_data())
+    if not request.json or 'username' not in request.json:
+        return "False"
+    user = User.query.filter_by(username=request.json['username']).first()
+    conference = Conference.query.get(request.json['conference_id'])
+    user.conferences.append(conference)
+    return "True"
