@@ -4,13 +4,12 @@ from app import db
 
 # 用户user添加会议c：
 # user.conferences.append(c)
-# db.session.add(s)
 
 # 用户user参加的会议:
 # user.conferences.all()
 
 # 参加了会议c的用户:
-# c.User.all()
+# c.users.all()
 
 # 用户user退选会议c:
 # user.conferences.remove(c)
@@ -105,17 +104,28 @@ class Conference(db.Model):
     remark = db.Column(db.String(128))              	# 会议备注
     status = db.Column(db.String(16))               	# 会议状态
     create_time = db.Column(db.DateTime, index=True)	# 会议发布时间
+    image = db.Column(db.String(128))                   # 海报url
     documents = db.relationship('Document', backref='conference', lazy='dynamic')	# 会议文件
+
+    users = db.relationship(
+        'User',
+        secondary=Enroll,
+        backref=db.backref('conference', lazy='dynamic'),
+        lazy='dynamic'
+    )
 
     def __repr__(self):
         return '<Conference %r>' % self.name
 
     def to_dict(self):
+        docoments_dict = []
+        for doc in self.documents:
+            docoments_dict.append(doc.to_dict())
         return {
             'id': self.id,
             'name': self.name,
-            'date': self.date,
-            'duration': self.duration,
+            'date': str(self.date),
+            'duration': str(self.duration),
             'place': self.place,
             'introduction': self.introduction,
             'host': self.host,
@@ -123,12 +133,17 @@ class Conference(db.Model):
             'remark': self.remark,
             'status': self.status,
             'create_time': self.create_time,
-            'documents': self.documents
+            'documents': docoments_dict,
+            'image': self.image
         }
 
     # 获取会议结束时间
     def get_end_time(self):
         return self.date + self.duration
+
+    # 获取会议参加人数
+    def get_num(self):
+        return len(self.users.all())
 
 
 class Document(db.Model):
