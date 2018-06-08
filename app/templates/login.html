@@ -1,54 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% for msg in get_flashed_messages() %}　　　　　　　　　　<!--这里对应视图函数里定义的提示信息 flash-->
-<p class="login-box-msg" style="color: red;">{{ msg }}</p>　　　　<!--信息在前端显示-->
-{% endfor %}
-
-<br>
 <div class="row">
 	<div class="col-md-4 col-md-offset-4">
 		<div class="panel panel-primary" align="center">
 			<div class="panel-heading">登录</div>
 			<div class="panel-body">
 				<form class="form-horizontal" method="post">
+                    {{ form.csrf_token }}  <!--csrftoken必须要写，同时还要设置 app的secret_key-->
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <!--{{form.username(size=20)}}-->
-                            <input type="text" name="username" class="form-control" id="inputEmail" placeholder="Username">
-                            <!--<span class="glyphicon glyphicon-envelope form-control-feedback"></span>-->
-                            {% for err in form.username.errors %}　　　　　　　　<!--错误信息-->
-                                <div class="col-md-12">
-
-                                    <span style="color: red">{{ err }}</span>　　<!--显示错误信息-->
-                                </div>
-                            {% endfor %}
+                            <input type="text" name="username" class="form-control" id="inputEmail" placeholder="用户名">   
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <!--{{form.password(size=20)}}-->
-                            <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password">
-                            <!--<span class="glyphicon glyphicon-lock form-control-feedback"></span>-->
-                            {% for err in form.password.errors %}　　　　　　　　　　　　<!--pwd输入错误的提示信息-->
-                                <div class="col-md-12">
-                                    <font style="color: red">{{ err }}</font>
-                                </div>
-                            {% endfor %}
+                            <input type="password" name="password" class="form-control" id="inputPassword" placeholder="密码">
                         </div>
                     </div>
                     <p>
                         {{form.remember_me}} Remember me
                     </p>
                     <div class="form-group">
-                        <div class=" col-sm-3 col-sm-offset-2">
-                            <!--{{form.submit}}-->
-                            <button type="submit"  class="btn btn-primary">登录</button>
-                            {{ form.csrf_token }}  <!--csrftoken必须要写，同时还要设置 app的secret_key-->
-                        </div>
-                        <div class=" col-sm-3 col-sm-offset-2">
-                            <button action="login.py" class="btn btn-default">注册</button>
-                        </div>
+                        <!-- <div class=" col-sm-3 col-sm-offset-2"> -->
+                            <button type="submit"  class="btn btn-primary">登录</button> 
+                        <!-- </div> -->
 				    </div>
 				</form>
 			</div>
