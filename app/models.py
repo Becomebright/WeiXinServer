@@ -1,27 +1,48 @@
 # -*- coding: UTF-8 -*-
+from flask import session
 
 from app import db
 
 # 用户user添加会议c：
-# user.conferences.append(c)
+# user = User.query.get(1)
+# e = Enroll(time=datetime.today())
+# e.conference = conference
+# user.enrolls.append(e)
+# db.session.add(e)
+# db.session.commit()
+
+# 用户user取消报名会议conf：
+# e = Enroll.query.filter_by(user_id=user.id, conference_id=conf.id)
+# user.enrolls.remove(e)
+# db.session.delete(e)
+# db.session.commit()
 
 # 用户user参加的会议:
 # user.conferences.all()
 
 # 参加了会议c的用户:
-# c.users.all()
+#session.query(User).filter(User.conferences.any(id=xxx)).all()
 
 # 用户user退选会议c:
 # user.conferences.remove(c)
 
 
-Enroll = db.Table(
-    'Enroll',
-    db.Column('user_id', db.Integer, db.ForeignKey('User.id')),
-    db.Column('conference_id', db.Integer, db.ForeignKey('Conference.id')),
-    db.Column('time', db.DateTime),
-    db.Column('status', db.Integer)  # 报名状态：0-审核中, 1-审核通过
-)
+# Enroll = db.Table(
+#     'Enroll',
+#     db.Column('user_id', db.Integer, db.ForeignKey('User.id')),
+#     db.Column('conference_id', db.Integer, db.ForeignKey('Conference.id')),
+#     db.Column('time', db.DateTime),
+#     db.Column('status', db.Integer)  # 报名状态：0-审核中, 1-审核通过
+# )
+
+
+class Enroll (db.Model):
+    __tablename__ = 'Enroll'
+    user_id = db.Column(db.Integer,db.ForeignKey('User.id'), primary_key=True)
+    conference_id = db.Column(db.Integer, db.ForeignKey('Conference.id'), primary_key=True)
+    time = db.Column(db.DateTime),
+    status = db.Column(db.Integer, default=0)  # 报名状态：0-审核中, 1-审核通过, 2-审核不通过
+    conference = db.relationship("Conference", backref="enroll")
 
 
 class User(db.Model):
@@ -39,11 +60,10 @@ class User(db.Model):
 
     manage_conferences = db.relationship('Conference', backref='admin', lazy='dynamic')
 
-    conferences = db.relationship(
-        'Conference',
-        secondary=Enroll,
-        backref=db.backref('user', lazy='dynamic'),
-        lazy='dynamic'
+    enrolls = db.relationship(
+        'Enroll',
+        backref='user',
+        lazy='dynamic',
     )
 
     def __repr__(self):
@@ -64,7 +84,12 @@ class User(db.Model):
         if self.is_super is True:
             ret_dict['manage_conferences'] = self.manage_conferences
         else:
-            ret_dict['conferences'] = self.conferences
+            confs = []
+            enrolls = Enroll.query.filter_by(user_id=self.id).all()
+            for e in enrolls:
+                c = Conference.query.get(e.conference_id)
+                confs.append(c.to_dict())
+            ret_dict['conferences'] = confs
         return ret_dict
 
 
@@ -107,12 +132,12 @@ class Conference(db.Model):
     image = db.Column(db.String(128))                   # 海报url
     documents = db.relationship('Document', backref='conference', lazy='dynamic')	# 会议文件
 
-    users = db.relationship(
-        'User',
-        secondary=Enroll,
-        backref=db.backref('conference', lazy='dynamic'),
-        lazy='dynamic'
-    )
+    # users = db.relationship(
+    #     'Enroll',
+    #     secondary=Enroll,
+    #     backref=db.backref('conference', lazy='dynamic'),
+    #     lazy='dynamic'
+    # )
 
     def __repr__(self):
         return '<Conference %r>' % self.name
@@ -143,7 +168,7 @@ class Conference(db.Model):
 
     # 获取会议参加人数
     def get_num(self):
-        return len(self.users.all())
+        return len(Enroll.query.filter_by(conference_id=self.id).all())
 
 
 class Document(db.Model):
