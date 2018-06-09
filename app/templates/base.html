@@ -26,6 +26,16 @@
         }
 
 	  </style>
+ <script src="static/js/jquery-3.2.1.min.js"></script>
+          <script>
+function getRow(a){
+alert(a.rowIndex);
+}
+$(".getIndex").click(function(){
+        var val = $(this).attr("id")  //定义val值为点击的此td的id值；
+        $.post("/preview", {'indexNumber': val});
+    });
+</script>
   </head>
   <body>
   	<div class="container">

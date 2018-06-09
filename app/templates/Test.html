@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="VEBznccV3cnMFffMg6cZ4ugtCgkYv5mHvBeHBlUT">
+    <link rel="icon" type="image/x-icon" href="https://www.luozy.cn/favicon.ico">
+
+    <title>登录 - 你的个人生活中心</title>
+
+    <!-- Styles -->
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        .navbar-brand {
+            padding-left: 50px;
+            background-image: url('https://www.luozy.cn/storage/images/logo.png');
+            background-size: auto 80%;
+            background-repeat: no-repeat;
+            background-position: 7px 50%;
+        }
+            </style>
+
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+<body>
+
+<!-- Header -->
+<header>
+
+    <!-- Nav -->
+    <nav class="navbar navbar-default" role="navigation" style="margin-bottom:0;">
+        <div class="container">
+            <div class="navbar-header">
+                <!-- Collapsed Hamburger -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#app-navbar-collapse">
+                    <span class="sr-only"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://www.luozy.cn">宇你同在</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="app-navbar-collapse">
+                <!-- Left Side Of Navbar -->
+                <ul class="nav navbar-nav">
+                    <li><a href="https://www.luozy.cn/share">分享</a></li>
+                    <li><a href="https://www.luozy.cn/question">问答</a></li>
+                    <li><a href="https://www.luozy.cn/games">游戏中心</a></li>
+                    <li><a href="https://www.luozy.cn/account">个人中心</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li style="margin-right: 50px;padding-top: 8px" class="">
+                        <form class="form-horizontal col-md-8" role="form">
+                            <input class="form-control" type="search" id="mySearch" placeholder="搜索...">
+                        </form>
+                    </li>
+                                            <li><a href="https://www.luozy.cn/login">登录</a></li>
+                        <li><a href="https://www.luozy.cn/register">注册</a></li>
+                                    </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Content -->
+<section>
+    <div class="jumbotron" style="background-image:url('https://www.luozy.cn/storage/images/textures/leather.png')">
+        <div class="container">
+            <h1>登录</h1>
+            <p></p>
+        </div>
+    </div>
+
+    <div class="container">
+            <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">登录帐号</div>
+            <div class="panel-body">
+                <form class="form-horizontal" role="form" method="POST" action="https://www.luozy.cn/login">
+                    <input type="hidden" name="_token" value="VEBznccV3cnMFffMg6cZ4ugtCgkYv5mHvBeHBlUT">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">邮箱帐号</label>
+                        <div class="col-md-6">
+                            <input type="email" class="form-control" name="email" value=""
+                                   maxlength="30">
+                                                    </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">密码</label>
+                        <div class="col-md-6">
+                            <input type="password" class="form-control" name="password" maxlength="22"
+                                   autocomplete="off">
+                                                    </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-6 col-md-offset-4">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="remember"> 一星期自动登录
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-6 col-md-offset-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-btn fa-sign-in"></i>立即登录
+                            </button>
+
+                            <a class="btn btn-link" href="https://www.luozy.cn/password/reset">忘记密码了?</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<!--Footer-->
+<footer class="footer">
+    <div class="container text-muted" style="text-align: right;">
+        <hr>
+        <p>Copyright &copy; 2015 - 2018 luozy.cn 保留所有权利。</p>
+        <p>京ICP备15059548号-1</p>
+    </div>
+</footer>
+
+</body>
+</html>

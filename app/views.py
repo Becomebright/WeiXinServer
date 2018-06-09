@@ -7,6 +7,8 @@ from flask_bootstrap import Bootstrap
 from app import app, login_manager
 from app.forms import *
 from app.models import *
+from werkzeug.utils import secure_filename
+import os
 
 Bootstrap(app)
 
