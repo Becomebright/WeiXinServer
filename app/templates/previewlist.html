@@ -23,8 +23,8 @@
                     <td>{{ conference.date }}</td>
                     <td>{{ conference.duration }}</td>
                     <td>{{ conference.status }}</td>
-                    <td><a href="preview">详细信息</a></td>
-                    <td><a href="examine">审核</a></td>
+                    <td><a href="{{ url_for('preview', conference_id=conference.id)}}">详细信息</a></td>
+                    <td><a href="{{ url_for('examine', conference_id=conference.id)}}">审核</a></td>
                 </tr>
             {% endfor %}
 
