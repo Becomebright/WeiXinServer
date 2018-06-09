@@ -5,7 +5,7 @@
         <table width="100%">
             <tr align="center">
                 <td>
-                    <table  width="60%">
+                    <table  width="60%" >
                         <thead>
                             <tr>
                                 <th><h1>{{ conference.name }}</h1></th>
@@ -15,41 +15,41 @@
                         <tbody>
                             <tr>
                                 {% if conference.introduction %}
-                                <td><h4>&bull;会议简介：{{ conference.introduction }}</h4></td>
+                                <td><h4><b>会议简介：</b><br><br>{{ conference.introduction }}</h4></td>
                                 <!--会议简介-->
                                 {% endif %}
                             </tr>
                             <tr>
                                 {% if conference.host %}
-                                <td><h4>&bull;主持人：{{conference.host}}</h4></td>
+                                <td><h4><b>主持人：</b>{{conference.host}}</h4></td>
                                 <!--嘉宾介绍-->
                                 {% endif %}
                             </tr>
                             <tr>
                                 {% if conference.guest_intro %}
-                                <td><h4>&bull;嘉宾介绍：{{conference.guest_intr}}</h4></td>
+                                <td><h4><b>嘉宾介绍：</b><br><br>{{conference.guest_intro}}</h4></td>
                                 <!--嘉宾介绍-->
                                 {% endif %}
                             </tr>
                             <tr>
-                                <td><h4>&bull;会议时间：{{ conference.date }}</h4></td>
+                                <td><h4><b>会议时间：</b>{{ conference.date }}</h4></td>
                                 <!--会议时间-->
                             </tr>
                             <tr>
-                                <td><h4>&bull;会议时长：{{ conference.duration }}</h4></td>
+                                <td><h4><b>会议时长：</b>{{ conference.duration }}</h4></td>
                                 <!--会议时长-->
                             </tr>
                             <tr>
-                                <td><h4>&bull;会议地点：{{ conference.place }}</h4></td>
+                                <td><h4><b>会议地点：</b>{{ conference.place }}</h4></td>
                                 <!--会议地点-->
                             </tr>
                             <tr>
-                                <td><h4>&bull;会议状态：{{ conference.status }}</h4></td>
+                                <td><h4><b>会议状态：</b>{{ conference.status }}</h4></td>
                                 <!--会议状态-->
                             </tr>
                             <tr>
                                 {% if conference.remark %}
-                                <td><h4>&bull;备注：{{ conference.remark }}</h4></td>
+                                <td><h4><b>备注：</b><br><br>{{ conference.remark }}</h4></td>
                                 <!--备注信息-->
                                 {% endif %}
                             </tr>
@@ -58,6 +58,7 @@
                 </td>
             </tr>
         </table>
+
     </p>
     <table class="table table-hover" width="80%">
         <thead>
