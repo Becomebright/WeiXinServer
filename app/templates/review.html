@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+    <p>
+        <!-- 会议名称作标题 -->
+        <table width="100%">
+            <tr align="center">
+                <td>
+                    <table  width="60%">
+                        <thead>
+                            <tr>
+                                <th><h1>{{ conference.name }}</h1></th>
+                                <!--会议名称-->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>上传文件
+                                    <form action="" enctype='multipart/form-data' method='POST'>
+                                        <input type="file" name="file" class="btn btn-default">
+                                        <input type="submit" value="上传" class="btn btn-default">
+                                    </form>
+                                <form id="example" name="example">
+                                <label>会议回顾：</label>
+                                <textarea id="t1" name="t1" style="width:400px;height:200px; resize:none"></textarea>
+                                <input type="hidden" id="t2" name="t2" />
+                                <input type="submit" value="提交" id="submit" name="submit" onclick="return preSave();" />
+                                </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <lable><strong>文件列表：</strong></lable>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <ul class="list-group">
+                                    <li class="list-group-item">Cras justo odio</li>
+                                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                                    <li class="list-group-item">Morbi leo risus</li>
+                                    <li class="list-group-item">Porta ac consectetur ac</li>
+                                    <li class="list-group-item">Vestibulum at eros</li>
+                                </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+    </p>
+
+{% endblock %}

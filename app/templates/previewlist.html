@@ -13,6 +13,7 @@
                         <th width="40">会议状态</th>
                         <th width="50">详细内容</th>
                         <th width="50">报名审核</th>
+                        <th width="50">会议回顾</th>
                     </tr>
             </thead>
             <tbody>
@@ -25,6 +26,11 @@
                     <td>{{ conference.status }}</td>
                     <td><a href="{{ url_for('preview', conference_id=conference.id)}}">详细信息</a></td>
                     <td><a href="{{ url_for('examine', conference_id=conference.id)}}">审核</a></td>
+                    {% if conference.review %}
+                    <td><a href="{{ url_for('review', conference_id=conference.id)}}">查看回顾</a></td>
+                    {% else %}
+                    <td><a href="{{ url_for('review', conference_id=conference.id)}}">发表回顾</a></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
 

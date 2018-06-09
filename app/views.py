@@ -33,6 +33,13 @@ def add_conference():
     else:
         user = current_user
     tag = {'name': 'add_conference'}
+    if request.method == 'POST':
+        f = request.files['file']
+        basepath = os.path.dirname(__file__)  # 当前文件所在路径
+        upload_path = os.path.join(basepath, 'static/uploads',secure_filename(f.filename))  #注意：没有的文件夹一定要先创建，不然会提示没有该路径
+        f.save(upload_path)
+        #return redirect(url_for('upload'))
+        print('上传成功!')
     if form.validate_on_submit():
         admin_id = user.id
         name = form.name.data
@@ -89,6 +96,29 @@ def preview(conference_id):
         return redirect(url_for(preview))
     else:
         return render_template('preview.html', user=user, tag=tag, conference=conference)
+
+
+@app.route('/review/<conference_id>',methods=['GET','POST'])
+@login_required
+def review(conference_id):
+    if current_user.is_anonymous:
+        user = None
+    else:
+        user = current_user
+    tag = {'name': 'review'}
+    conference = Conference.query.get(conference_id)
+    if request.method == 'POST':
+        f = request.files['file']
+        basepath = os.path.dirname(__file__)  # 当前文件所在路径
+        upload_path = os.path.join(basepath, 'static/uploads',secure_filename(f.filename))  #注意：没有的文件夹一定要先创建，不然会提示没有该路径
+        f.save(upload_path)
+        #return redirect(url_for('upload'))
+        print('上传成功!')
+    if conference is None:
+        flash(message='Error', category='danger')
+        return redirect(url_for(review))
+    else:
+        return render_template('review.html', user=user, tag=tag, conference=conference)
 
 
 @app.route('/examine/<conference_id>')
