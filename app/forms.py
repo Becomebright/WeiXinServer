@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateTimeField, DecimalField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateTimeField, DecimalField,TextAreaField
 from wtforms.validators import DataRequired, Length, EqualTo, Email, ValidationError
 
 from app.models import User
@@ -10,10 +10,10 @@ class AddConferenceForm(FlaskForm):
     date = DateTimeField('date', validators=[DataRequired()])
     place = StringField('place', validators=[DataRequired()])
     duration = StringField('duration', validators=[DataRequired()])
-    introduction = StringField('introduction',validators=[DataRequired()])
+    introduction = TextAreaField('introduction',validators=[DataRequired()])
     host = StringField('host',validators=[DataRequired()])
-    guest_intro = StringField('guest_intro',validators=[DataRequired()])
-    remark = StringField('remark',validators=[DataRequired()])
+    guest_intro = TextAreaField('guest_intro',validators=[DataRequired()])
+    remark = TextAreaField('remark',validators=[DataRequired()])
 
     submit = SubmitField('提交')
 
