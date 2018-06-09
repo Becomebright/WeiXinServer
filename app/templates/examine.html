@@ -53,60 +53,39 @@
                                 <!--备注信息-->
                                 {% endif %}
                             </tr>
-                            <tr>
-                                <table class="table table-striped" align="center">
-                                    <tr>
-                                        <td align="center" width="200px" height="70px">
-                                            报名人员
-                                        </td>
-                                        <td align="center" width="200px" height="70px">
-                                            允许参会
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center" width="200px">
-                                            JZR
-                                        </td>
-                                        <td align="center" width="200px">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox">
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center" width="200px">
-                                            JZR
-                                        </td>
-                                        <td align="center" width="200px">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox">
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center" width="200px">
-                                            JZR
-                                        </td>
-                                        <td align="center" width="200px">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox">
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </tr>
                         </tbody>
                     </table>
                 </td>
             </tr>
         </table>
-
     </p>
+    <table class="table table-hover" width="80%">
+        <thead>
+            <tr align="center">
+                <th><strong>#</strong></th>
+                <th><strong>报名人员</strong></th>
+                <th><strong>审核</strong></th>
+            </tr>
+        </thead>
 
+        {% for u in users %}
+        <tr align="center">
+            <td>{{loop.index}}</td>
+            <td>{{ u.name }}</td>        
+            <td>
+                {% set bt1_class = "" %}
+                {% set bt1_class = "" %}
+                {% if u.status == 1 %}
+                    {% set bt1_class = "disabled" %}
+                {% elif u.status == 2 %}
+                    {% set bt2_class = "disabled" %}
+                {% endif %}
+                <a href="{{ url_for( 'accept_enroll', conference_id=conference.id, user_id=u.id ) }}" class="btn btn-success {{bt1_class}}">通过</a>
+                <a href="{{ url_for( 'refuse_enroll', conference_id=conference.id, user_id=u.id ) }}" class="btn btn-danger {{bt2_class}}">拒绝</a>
+            </td>    
+        </tr>
+        {% endfor %}
+
+    </table>
+    
 {% endblock %}
