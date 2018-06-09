@@ -7,7 +7,7 @@ from app.models import User
 
 class AddConferenceForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
-    date = DateTimeField('date', validators=[DataRequired()])
+    date = StringField('date', validators=[DataRequired()])
     place = StringField('place', validators=[DataRequired()])
     duration = StringField('duration', validators=[DataRequired()])
     introduction = TextAreaField('introduction',validators=[DataRequired()])

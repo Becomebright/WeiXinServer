@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from datetime import *
+import datetime
 from urllib.parse import urlparse, urljoin
 from flask import render_template, redirect, url_for, flash, request, abort, session, jsonify, g
 from flask_login import login_required, login_user, current_user, logout_user
@@ -44,14 +44,14 @@ def add_conference():
         admin_id = user.id
         name = form.name.data
         date = form.date.data
+        date = datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M')
         place = form.place.data
 
         duration = form.duration.data
-        duration = datetime.datetime.strptime(duration, '%H:%M:%S')
+        duration = datetime.datetime.strptime(duration, '%H:%M')
         hour = duration.hour
         minute = duration.minute
-        second = duration.second
-        duration = datetime.timedelta(hours=hour, minutes=minute, seconds=second)
+        duration = datetime.timedelta(hours=hour, minutes=minute, seconds=0)
 
         introduction = form.introduction.data
         host = form.host.data
