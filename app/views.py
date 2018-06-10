@@ -34,12 +34,16 @@ def add_conference():
         user = current_user
     tag = {'name': 'add_conference'}
     if request.method == 'POST':
-        f = request.files['file']
-        basepath = os.path.dirname(__file__)  # 当前文件所在路径
-        upload_path = os.path.join(basepath, 'static/uploads',secure_filename(f.filename))  #注意：没有的文件夹一定要先创建，不然会提示没有该路径
-        f.save(upload_path)
-        #return redirect(url_for('upload'))
-        print('上传成功!')
+        try:
+            f = request.files['file']
+            basepath = os.path.dirname(__file__)  # 当前文件所在路径
+            upload_path = os.path.join(basepath, 'static/uploads',secure_filename(f.filename))  # 注意：没有的文件夹一定要先创建，不然会提示没有该路径
+            f.save(upload_path)
+            # return redirect(url_for('upload'))
+            print('上传成功!')
+        except:
+            print('请上传海报')
+            return render_template('add_conference.html', user=user, form=form, tag=tag, is_success=False)
     if form.validate_on_submit():
         admin_id = user.id
         name = form.name.data

@@ -32,14 +32,26 @@
 	  </style>
  <script src="static/js/jquery-3.2.1.min.js"></script>
           <script>
-function getRow(a){
-alert(a.rowIndex);
-}
-$(".getIndex").click(function(){
-        var val = $(this).attr("id")  //定义val值为点击的此td的id值；
-        $.post("/preview", {'indexNumber': val});
-    });
-</script>
+              function toVaild(){
+                  var val_name = document.addConference.name.value;
+                  var val_date = document.addConference.date.value;
+                  var val_place = document.addConference.place.value;
+                  var val_duration = document.addConference.duration.value;
+                  var val_intro = document.addConference.introduction.value;
+                  var val_host = document.addConference.host.value;
+                  var val_guestintro = document.addConference.guest_intro.value;
+                  var val_remark = document.addConference.remark.value;
+                  var val_file = document.addConference.file.value;
+
+                  if(!val_file || !val_name || !val_date || !val_duration || !val_intro || !val_host || !val_guestintro || !val_remark){
+                      alert("请先填写所有内容并上传海报");
+                      return false;
+                  }
+                  else{
+                      return true;
+                  }
+              }
+          </script>
 
   </head>
   <body>

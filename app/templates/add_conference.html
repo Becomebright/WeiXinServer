@@ -2,7 +2,7 @@
 {% block content %}
     <br><br>
     {% if not is_success %}
-    <form name="addConference" action="" method="post">
+    <form name="addConference" action="" method="post" enctype='multipart/form-data'  onsubmit="toVaild()" >
         {{form.hidden_tag() }}
         <p>
             会议名称: {{form.name(size=50)}}<br><br>
@@ -31,14 +31,13 @@
             会议备注: {{form.remark(style="height:200px;width:400px;resize:none;vertical-align:top;")}}<br><br>
         </p>
         <p>
-            会议海报上传：
-            <form action="" enctype='multipart/form-data' method='POST' >
-                <input type="file" name="file" class="btn btn-default">
-                <input type="submit" value="上传" class="btn btn-default">
-            </form>
+{#    <form action="" enctype='multipart/form-data' method='POST'>#}
+            海报上传：
+            <input type="file" name="file" class="btn btn-default"><em>图片名请不要包含中文字符</em>
+{#            <input type="submit" value="提交">#}
+{#    </form>#}
         </p>
-        <p>
-            {{form.submit(class="btn btn-default")}}
+        <p>{{form.submit(class="btn btn-default")}}
         </p>
     </form>
     {% else %}
