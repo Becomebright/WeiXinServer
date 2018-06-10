@@ -65,8 +65,8 @@
                                         {% if conference.status=="已结束"%}
                                         {% set change_class = "disabled" %}
                                         {% endif %}
-                                        <a type="button" class="btn btn-info{{ change_class }}">修改信息</a>
                                         {% if conference.status!="已结束" %}
+                                        <a type="button" class="btn btn-info{{ change_class }}"  href = "{{ url_for('add_conference', conference_id=conference.id)}}">修改信息</a>
                                         <a type="button" class="btn btn-info{{ publish_class }}" href = "{{ url_for('publish', conference_id=conference.id)}}">发布会议</a>
                                         {% endif %}
                                     </td>

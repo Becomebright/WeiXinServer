@@ -29,15 +29,26 @@ def index():
     return render_template("index.html", user=user, tag=tag)
 
 
-@app.route('/add_conference', methods=['GET', 'POST'])
+@app.route('/add_conference/<conference_id>', methods=['GET', 'POST'])
 @login_required
-def add_conference():
+def add_conference(conference_id):
     form = AddConferenceForm()
     if current_user.is_anonymous:
         user = None
     else:
         user = current_user
     tag = {'name': 'add_conference'}
+    if conference_id != '0':
+        conference = Conference.query.get(conference_id)
+        form.name.data = conference.name
+        form.date.data = '%04d-%02d-%02dT%02d:%02d'%(conference.date.year,conference.date.month,conference.date.day,conference.date.hour,conference.date.minute)
+        form.duration.data = '%02d:%02d'%(conference.duration.seconds/3600,conference.duration.seconds/60-60*(conference.duration.seconds/3600))
+        form.place.data = conference.place
+        form.host.data = conference.host
+        form.introduction.data = conference.introduction
+        form.guest_intro.data = conference.guest_intro
+        form.remark.data = conference.remark
+
     if request.method == 'POST':
         try:
             f = request.files['file']
