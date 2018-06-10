@@ -19,7 +19,7 @@
                                 <form id="review" name="review" method="post">
                                     {{ form.csrf_token }}
                                     <label>会议回顾：</label>
-                                    <textarea id="review" name="review" style="width:700px;height:200px; resize:none"></textarea>
+                                    <textarea id="review" name="review" style="width:700px;height:200px; resize:none" required>{{ conference.review }}</textarea>
                                     <input type="hidden" id=review name=review/>
                                     <label>视频id：</label>
                                     <textarea id=vid name=vid style="width:700px;height:30px;resize:none"></textarea>
