@@ -47,3 +47,14 @@ class RegisterForm(FlaskForm):
     wechat = StringField(
         label='微信号')
     submit = SubmitField('立即注册')
+
+
+# 会议回顾表单
+class ReviewForm(FlaskForm):
+    review = StringField(
+        label='会议回顾'
+    )
+    vid = StringField(
+        label='视频id'
+    )
+    submit = SubmitField('提交')

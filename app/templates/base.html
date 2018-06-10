@@ -69,18 +69,18 @@
 			<li role="presentation" id="/index"><a href="{{url_for('index')}}">Home</a></li>
 			<li role="presentation" id="/add_conference"><a href="{{url_for('add_conference')}}">发布会议</a></li>
 			<li role="presentation" id="/previewlist"><a href="{{url_for('previewlist')}}">预览</a></li>
-			{% if g.user.is_authenticated %}
-			<li role="presentation" id="/logout"><a href="{{url_for('logout')}}">注销</a></li>
+		    {% if g.user.is_authenticated %}
+			    <li role="presentation" id="/logout"><a href="{{url_for('logout')}}">注销</a></li>
             {% else %}
-            <li role="presentation" id="/login"><a href="{{url_for('login')}}">登录</a></li>
-			<li role="presentation" id="/register"><a href="{{url_for('register')}}">注册</a></li>
-			{% endif %}
+                <li role="presentation" id="/login"><a href="{{url_for('login')}}">登录</a></li>
+			    <li role="presentation" id="/register"><a href="{{url_for('register')}}">注册</a></li>
+	        {% endif %}
 			{% if tag %}
 			<!-- 获取当前页面路径，设置标签页active -->
-			<script type="text/javascript">
-				var test = window.location.pathname;
-				document.getElementById(test).setAttribute("class","active");
-			</script>
+    			<script type="text/javascript">
+    				var test = window.location.pathname;
+    				document.getElementById(test).setAttribute("class","active");
+    			</script>
 			{% endif %}
 		</ul>
 		

@@ -130,7 +130,11 @@ class Conference(db.Model):
     status = db.Column(db.String(16))               	# 会议状态
     create_time = db.Column(db.DateTime, index=True)	# 会议发布时间
     image = db.Column(db.String(128))                   # 海报url
+    vid = db.Column(db.String(32))                      # 视频vid
+    review = db.Column(db.String(1024))                 # 会议回顾
+
     documents = db.relationship('Document', backref='conference', lazy='dynamic')	# 会议文件
+
 
     # users = db.relationship(
     #     'Enroll',
@@ -158,7 +162,7 @@ class Conference(db.Model):
             'remark': self.remark,
             'status': self.status,
             'create_time': self.create_time,
-            'documents': docoments_dict,
+            'files': docoments_dict,
             'image': self.image
         }
 
@@ -177,7 +181,8 @@ class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     conference_id = db.Column(db.Integer, db.ForeignKey('Conference.id'))
 
-    url = db.Column(db.String(512))
+    filename = db.Column(db.String(64), unique=True)
+    url = db.Column(db.String(256))
 
     def __repr__(self):
         return '<Document %r>' % self.id

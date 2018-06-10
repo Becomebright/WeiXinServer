@@ -8,41 +8,54 @@
                     <table  width="60%">
                         <thead>
                             <tr>
-                                <th><h1>{{ conference.name }}</h1></th>
+                                <th><h1>{{ conference.name }}——发表会议回顾</h1></th>
                                 <!--会议名称-->
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>上传文件
-                                    <form action="" enctype='multipart/form-data' method='POST'>
-                                        <input type="file" name="file" class="btn btn-default">
-                                        <input type="submit" value="上传" class="btn btn-default">
-                                    </form>
-                                <form id="example" name="example">
-                                <label>会议回顾：</label>
-                                <textarea id="t1" name="t1" style="width:700px;height:200px; resize:none"></textarea>
-                                <input type="hidden" id="t2" name="t2" />
-                                <label>视频id：</label>
-                                <textarea id="t2" name="t2" style="width:700px;height:30px;resize:none"></textarea>
-                                <input type="hidden" id="t2" name="t2" />
-                                <input type="submit" value="提交" id="submit" name="submit" onclick="return preSave();" />
+                                <td>
+                                <br>
+                                <form id="review" name="review" method="post">
+                                    {{ form.csrf_token }}
+                                    <label>会议回顾：</label>
+                                    <textarea id="review" name="review" style="width:700px;height:200px; resize:none"></textarea>
+                                    <input type="hidden" id=review name=review/>
+                                    <label>视频id：</label>
+                                    <textarea id=vid name=vid style="width:700px;height:30px;resize:none"></textarea>
+                                    <input type="hidden" id=vid name=vid />
+                                    <input type="submit" value="提交" id="submit" name="submit" onclick="return preSave();" class="btn btn-primary" />
                                 </form>
                                 </td>
                             </tr>
+                            
+                            <tr>
+                                <td><br><br></td>
+                            </tr>
+
                             <tr>
                                 <td>
+                                    <label>上传文件</label>
+                                    <form action="" enctype='multipart/form-data' method='POST'>
+                                        <input type="file" name="file" class="btn btn-default">
+                                        <br>
+                                        <input type="submit" value="上传" class="btn btn-primary">
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <br>
                                     <lable><strong>文件列表：</strong></lable>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                 <ul class="list-group">
-                                    <li class="list-group-item">Cras justo odio</li>
-                                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                                    <li class="list-group-item">Morbi leo risus</li>
-                                    <li class="list-group-item">Porta ac consectetur ac</li>
-                                    <li class="list-group-item">Vestibulum at eros</li>
+                                    {% for doc in docs %}
+                                        <li class="list-group-item">{{ doc.filename }}</li>
+                                    {% endfor %}
                                 </ul>
                                 </td>
                             </tr>

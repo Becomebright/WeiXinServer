@@ -1,4 +1,8 @@
 from datetime import *
+
+import flask
+import os
+
 from app.models import *
 
 # dt = datetime.today()
@@ -16,14 +20,16 @@ from app.models import *
 #
 from app.views import get_conf_dict
 
-user = User.query.get(1)
-e = Enroll(time=datetime.today())
-e.conference = Conference.query.get(3)
-db.session.add(e)
-db.session.commit()
-user.enrolls.append(e)
+# user = User.query.get(1)
+# e = Enroll(time=datetime.today())
+# e.conference = Conference.query.get(3)
+# db.session.add(e)
+# db.session.commit()
+# user.enrolls.append(e)
+#
+#
+# for conf in Conference.query.all():
+#     print(conf)
+#     print(get_conf_dict(conf=conf, user=user))
 
-
-for conf in Conference.query.all():
-    print(conf)
-    print(get_conf_dict(conf=conf, user=user))
+print(os.path.dirname(__file__))
