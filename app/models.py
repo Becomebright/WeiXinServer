@@ -191,3 +191,4 @@ class Document(db.Model):
 
     def to_dict(self):
         return {'id': self.id, 'conference_id': self.conference_id, 'url': self.url, 'filename': self.filename}
+

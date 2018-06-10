@@ -6,8 +6,6 @@ import os
 from flask import render_template, redirect, url_for, flash, request, abort, jsonify, g, send_from_directory
 from flask_login import login_required, login_user, current_user, logout_user
 from flask_bootstrap import Bootstrap
-from werkzeug._compat import text_type, PY2
-from werkzeug.utils import _filename_ascii_strip_re, _windows_device_files, secure_filename
 
 from app import app, login_manager, ALLOWED_EXTENSIONS
 from app.forms import *
@@ -29,10 +27,17 @@ def index():
     return render_template("index.html", user=user, tag=tag)
 
 
+def is_image(filename):
+    ALLOWED = set(['png', 'jpg', 'jpeg'])
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED
+
+
 @app.route('/add_conference/<conference_id>', methods=['GET', 'POST'])
 @login_required
 def add_conference(conference_id):
     form = AddConferenceForm()
+    file_url = None
     if current_user.is_anonymous:
         user = None
     else:
@@ -50,16 +55,27 @@ def add_conference(conference_id):
         form.remark.data = conference.remark
 
     if request.method == 'POST':
-        try:
-            f = request.files['file']
-            basepath = os.path.dirname(__file__)  # 当前文件所在路径
-            upload_path = os.path.join(basepath, 'static/uploads',secure_filename(f.filename))  # 注意：没有的文件夹一定要先创建，不然会提示没有该路径
-            f.save(upload_path)
-            # return redirect(url_for('upload'))
-            print('上传成功!')
-        except:
-            print('请上传海报')
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash(message='本次提交未上传海报', category='info')
             return render_template('add_conference.html', user=user, form=form, tag=tag, is_success=False)
+        f = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if f.filename == '':
+            flash(message='No selected file', category='danger')
+            return render_template('add_conference.html', user=user, form=form, tag=tag, is_success=False)
+        elif not is_image(f.filename):
+            flash(message='图片必须是png/jpg/jpeg格式', category='danger')
+            return render_template('add_conference.html', user=user, form=form, tag=tag, is_success=False)
+        elif f:
+            filename = secure_filename(f.filename)
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename).replace('\\', '/'))
+            file_url = 'https://dszdsz.cn/static' + url_for('uploaded_file', filename=filename)
+        else:
+            flash('图片上传失败', category='danger')
+            return render_template('add_conference.html', user=user, form=form, tag=tag, is_success=False)
+
     if form.validate_on_submit():
         form = AddConferenceForm()
         admin_id = user.id
@@ -84,7 +100,7 @@ def add_conference(conference_id):
         if conference_id == '0':
             conference = Conference(admin_id=admin_id, name=name, date=date, place=place, duration=duration,
                                 introduction=introduction, host=host, guest_intro=guest_intro, remark=remark,
-                                status=status, create_time=create_time)
+                                status=status, create_time=create_time, image=file_url)
             print(conference.to_dict())
             db.session.add(conference)
             db.session.commit()
@@ -101,8 +117,11 @@ def add_conference(conference_id):
             conference.remark = remark
             conference.create_time = create_time
             conference.status = status
+            conference.image = file_url
             db.session.commit()
-        return render_template('add_conference.html', user=user, tag=tag, is_success=True)
+        flash(message='会议提交成功，请在审阅后发布', category='success')
+        # return render_template('add_conference.html', user=user, tag=tag, is_success=True)
+        return redirect(url_for('previewlist'))
     return render_template('add_conference.html', user=user, form=form, tag=tag, is_success=False)
 
 
@@ -122,15 +141,6 @@ def previewlist():
                 db.session.commit()
     conferences = Conference.query.order_by(db.desc(Conference.id)).all()
     return render_template('previewlist.html', user=user, tag=tag, conferences=conferences)
-
-
-def conferencechecktime():
-    for conference in Conference.query.all():
-        if conference.status == '已发布':
-            now = datetime.datetime.now()
-            if now < conference.date + conference.duration:
-                conference.status = '已结束'
-                db.session.commit()
 
 
 @app.route('/preview/<conference_id>')
@@ -194,6 +204,18 @@ def refuse_enroll(conference_id, user_id):
     return redirect(url_for('examine', conference_id=conference_id))
 
 
+# 文件上传相关
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# 获取上传文件的url: file_url = url_for('uploaded_file', filename=filename)
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return  send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
 @app.route('/review/<conference_id>', methods=['GET', 'POST'])
 @login_required
 def review(conference_id):
@@ -225,15 +247,16 @@ def review(conference_id):
             flash(message='No selected file', category='danger')
         elif not allowed_file(f.filename):
             flash(message='不允许上传该格式文件', category='danger')
-        elif f and allowed_file(f.filename):
-            filename = f.filename
-            basepath = os.path.dirname(__file__)  # 当前文件所在路径
-            upload_path = os.path.join(basepath, 'static/uploads', secure_filename(filename))  # 注意：没有的文件夹一定要先创建，不然会提示没有该路径
-            f.save(upload_path)
+        elif f:
+            filename = secure_filename(f.filename)
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename).replace('\\', '/'))
+            file_url = 'https://dszdsz.cn/static' + url_for('uploaded_file', filename=filename)
+            print(file_url)
+
             if Document.query.filter_by(filename=filename).first() is not None:
                 flash(message='文件名重复', category='info')
             else:
-                document = Document(filename=f.filename, url='dszdsz.cn/'+upload_path, conference_id=conference_id)
+                document = Document(filename=f.filename, url=file_url, conference_id=conference_id)
                 db.session.add(document)
                 db.session.commit()
                 flash(message='文件上传成功', category='success')
@@ -256,6 +279,10 @@ def get_conf_dict(conf, user):
     conf_dict['join_status'] = join_status
     conf_dict['isJoin'] = isJoin
     conf_dict['num'] = conf.get_num()
+    now = datetime.datetime.now()
+    if now > conf.date + conf.duration:
+        conf.status = '已结束'
+        db.session.commit()
     return conf_dict
 
 
@@ -275,7 +302,8 @@ def get_conferences():
     confs_dict = []
     for conf in conferences:
         conf_dict = get_conf_dict(conf, user)
-        confs_dict.append(conf_dict)
+        if conf_dict['status'] is not '未发布':
+            confs_dict.append(conf_dict)
     print(confs_dict)
     return jsonify(confs_dict)
 
@@ -295,14 +323,21 @@ def get_conference_detail():
     return jsonify(get_conf_dict(conference, user))
 
 
-@app.route('/get_user_info', methods=['POST'])
-def get_user_info():
+@app.route('/change_user_info', methods=['POST'])
+def change_user_info():
     print(request.get_data())
     if not request.json or 'username' not in request.json:
-        abort(400)
+        return "False"
     username = request.json['username']
+    name = request.json['name']
+    phone = request.json['phone']
     user = User.query.filter_by(username=username).first()
-    return jsonify(user.to_dict())
+    if user is None:
+        return "False"
+    user.name = name
+    user.phone = phone
+    db.session.commit()
+    return "True"
 
 
 @app.route('/enroll', methods=['POST'])
@@ -458,12 +493,6 @@ def register():
         login_user(user)
         return redirect(request.args.get('next') or url_for('index'))  # 重定向到首页
     return render_template('register.html', form=form, tag=tag)
-
-
-# 文件上传相关
-def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # 发布会议

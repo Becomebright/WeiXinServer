@@ -16,7 +16,7 @@ login_manager.login_view = 'login'
 login_manager.login_message = u"请先使用您的管理员账号登录"
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'docx', 'doc', 'pptx', 'ppt', 'xlsx'])
-app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024  # 上传文件最大大小：8M
-
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 上传文件最大大小：8M
+app.config['UPLOAD_FOLDER'] = os.path.dirname(__file__) + '/static/uploads'
 
 from app import views, models

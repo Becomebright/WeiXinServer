@@ -33,7 +33,7 @@
                         <td><a href="{{ url_for('review', conference_id=conference.id)}}">发表回顾</a></td>
                         {% endif %}
                     {% else %}
-                        <td>发表回顾</td>
+                        <td>会议尚未结束</td>
                     {% endif %}
                 </tr>
             {% endfor %}
