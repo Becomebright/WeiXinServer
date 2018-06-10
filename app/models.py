@@ -163,7 +163,9 @@ class Conference(db.Model):
             'status': self.status,
             'create_time': self.create_time,
             'files': docoments_dict,
-            'image': self.image
+            'image': self.image,
+            'vid': self.vid,
+            'review': self.review
         }
 
     # 获取会议结束时间
@@ -188,4 +190,4 @@ class Document(db.Model):
         return '<Document %r>' % self.id
 
     def to_dict(self):
-        return {'id': self.id, 'conference_id': self.conference_id, 'url': self.url}
+        return {'id': self.id, 'conference_id': self.conference_id, 'url': self.url, 'filename': self.filename}

@@ -26,10 +26,14 @@
                     <td>{{ conference.status }}</td>
                     <td><a href="{{ url_for('preview', conference_id=conference.id)}}">详细信息</a></td>
                     <td><a href="{{ url_for('examine', conference_id=conference.id)}}">审核</a></td>
-                    {% if conference.review %}
-                    <td><a href="{{ url_for('review', conference_id=conference.id)}}">查看回顾</a></td>
+                    {% if conference.status == '已结束' %}
+                        {% if conference.review %}
+                        <td><a href="{{ url_for('review', conference_id=conference.id)}}">查看回顾</a></td>
+                        {% else %}
+                        <td><a href="{{ url_for('review', conference_id=conference.id)}}">发表回顾</a></td>
+                        {% endif %}
                     {% else %}
-                    <td><a href="{{ url_for('review', conference_id=conference.id)}}">发表回顾</a></td>
+                        <td>发表回顾</td>
                     {% endif %}
                 </tr>
             {% endfor %}

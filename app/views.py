@@ -66,7 +66,7 @@ def add_conference():
         host = form.host.data
         guest_intro = form.guest_intro.data
         remark = form.remark.data
-        status = "未审核"
+        status = "未发布"
         create_time = datetime.datetime.today()
 
         conference = Conference(admin_id=admin_id, name=name, date=date, place=place, duration=duration,
@@ -87,8 +87,23 @@ def previewlist():
     else:
         user = current_user
     tag = {'name': 'previewlist'}
+    for conference in Conference.query.all():
+        if conference.status == '已发布':
+            now = datetime.datetime.now()
+            if now > conference.date + conference.duration:
+                conference.status = '已结束'
+                db.session.commit()
     conferences = Conference.query.all()
     return render_template('previewlist.html', user=user, tag=tag, conferences=conferences)
+
+
+def conferencechecktime():
+    for conference in Conference.query.all():
+        if conference.status == '已发布':
+            now = datetime.datetime.now()
+            if now < conference.date + conference.duration:
+                conference.status = '已结束'
+                db.session.commit()
 
 
 @app.route('/preview/<conference_id>')
@@ -174,7 +189,7 @@ def review(conference_id):
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash(message='No file part', category='danger')
+            flash(message='本次提交未上传文件', category='info')
             return redirect(request.url)
         f = request.files['file']
         # if user does not select file, browser also
@@ -206,9 +221,12 @@ def review(conference_id):
 def get_conf_dict(conf, user):
     conf_dict = conf.to_dict()
     isJoin = False
-    enroll = Enroll.query.filter_by(user_id=user.id, conference_id=conf.id).first()
-    if enroll is not None:
+    join_status = 0
+    e = Enroll.query.filter_by(user_id=user.id, conference_id=conf.id).first()
+    if e is not None:
+        join_status = e.status
         isJoin = True
+    conf_dict['join_status'] = join_status
     conf_dict['isJoin'] = isJoin
     conf_dict['num'] = conf.get_num()
     return conf_dict
@@ -223,7 +241,9 @@ def get_conferences():
     username = request.json['username']
     user = User.query.filter_by(username=username).first()
     if user is None:
-        return
+        user = User(username=username)
+        db.session.add(user)
+        db.session.commit()
     conferences = Conference.query.all()
     confs_dict = []
     for conf in conferences:
@@ -267,9 +287,11 @@ def enroll():
     conference = Conference.query.get(request.json['conference_id'])
     if user is None or conference is None:
         return "False"
-    e = Enroll(time=datetime.today())
+    e = Enroll(time=datetime.datetime.today())
     e.conference = conference
     e.user_id = user.id
+    if Enroll.query.filter_by(user_id=e.user_id, conference_id=e.conference_id).first() is not None:
+        return "False"
     # user.enrolls.append(e)
     db.session.add(e)
     db.session.commit()
