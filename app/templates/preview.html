@@ -58,7 +58,7 @@
                                 <div class="btn-group btn-group-lg" aria-label="...">
                                     <td align="center">
                                             <button type="button" class="btn btn-info">修改信息</button>
-                                            <button type="button" class="btn btn-info">发布会议</button>
+                                            <a type="button" class="btn btn-info" href = "{{ url_for('publish', conference_id=conference.id)}}">发布会议</a>
                                     </td>
                                 </div>
                             </tr>

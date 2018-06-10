@@ -415,3 +415,15 @@ def register():
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# 发布会议
+@app.route('/publish/<conference_id>', methods=['Get','POST'])
+def publish(conference_id):
+    conference = Conference.query.get(conference_id)
+    if conference is None:
+        flash(message='会议不存在!', category='danger')
+    else:
+        conference.status = '已发布'
+        db.session.commit()
+    return redirect(url_for('preview',conference_id=conference_id))
