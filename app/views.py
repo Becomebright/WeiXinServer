@@ -61,6 +61,7 @@ def add_conference(conference_id):
             print('请上传海报')
             return render_template('add_conference.html', user=user, form=form, tag=tag, is_success=False)
     if form.validate_on_submit():
+        form = AddConferenceForm()
         admin_id = user.id
         name = form.name.data
         date = form.date.data
@@ -80,12 +81,27 @@ def add_conference(conference_id):
         status = "未发布"
         create_time = datetime.datetime.today()
 
-        conference = Conference(admin_id=admin_id, name=name, date=date, place=place, duration=duration,
+        if conference_id == '0':
+            conference = Conference(admin_id=admin_id, name=name, date=date, place=place, duration=duration,
                                 introduction=introduction, host=host, guest_intro=guest_intro, remark=remark,
                                 status=status, create_time=create_time)
-        print(conference.to_dict())
-        db.session.add(conference)
-        db.session.commit()
+            print(conference.to_dict())
+            db.session.add(conference)
+            db.session.commit()
+        else:
+            conference = Conference.query.get(conference_id)
+            conference.admin_id = admin_id
+            conference.name = name
+            conference.date = date
+            conference.place = place
+            conference.duration = duration
+            conference.introduction = introduction
+            conference.host = host
+            conference.guest_intro = guest_intro
+            conference.remark = remark
+            conference.create_time = create_time
+            conference.status = status
+            db.session.commit()
         return render_template('add_conference.html', user=user, tag=tag, is_success=True)
     return render_template('add_conference.html', user=user, form=form, tag=tag, is_success=False)
 
@@ -104,7 +120,7 @@ def previewlist():
             if now > conference.date + conference.duration:
                 conference.status = '已结束'
                 db.session.commit()
-    conferences = Conference.query.all()
+    conferences = Conference.query.order_by(db.desc(Conference.id)).all()
     return render_template('previewlist.html', user=user, tag=tag, conferences=conferences)
 
 
@@ -255,7 +271,7 @@ def get_conferences():
         user = User(username=username)
         db.session.add(user)
         db.session.commit()
-    conferences = Conference.query.all()
+    conferences = Conference.query.order_by(db.desc(Conference.id)).all()
     confs_dict = []
     for conf in conferences:
         conf_dict = get_conf_dict(conf, user)

@@ -19,40 +19,7 @@
                                 <!--会议简介-->
                                 {% endif %}
                             </tr>
-                            <tr>
-                                {% if conference.host %}
-                                <td><h4><b>主持人：</b>{{conference.host}}</h4></td>
-                                <!--嘉宾介绍-->
-                                {% endif %}
-                            </tr>
-                            <tr>
-                                {% if conference.guest_intro %}
-                                <td><h4><b>嘉宾介绍：</b><br><br>{{conference.guest_intro}}</h4></td>
-                                <!--嘉宾介绍-->
-                                {% endif %}
-                            </tr>
-                            <tr>
-                                <td><h4><b>会议时间：</b>{{ conference.date }}</h4></td>
-                                <!--会议时间-->
-                            </tr>
-                            <tr>
-                                <td><h4><b>会议时长：</b>{{ conference.duration }}</h4></td>
-                                <!--会议时长-->
-                            </tr>
-                            <tr>
-                                <td><h4><b>会议地点：</b>{{ conference.place }}</h4></td>
-                                <!--会议地点-->
-                            </tr>
-                            <tr>
-                                <td><h4><b>会议状态：</b>{{ conference.status }}</h4></td>
-                                <!--会议状态-->
-                            </tr>
-                            <tr>
-                                {% if conference.remark %}
-                                <td><h4><b>备注：</b><br><br>{{ conference.remark }}</h4></td>
-                                <!--备注信息-->
-                                {% endif %}
-                            </tr>
+
                         </tbody>
                     </table>
                 </td>
