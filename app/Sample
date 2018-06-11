@@ -1,0 +1,35 @@
+from flask import Flask,render_template,request,redirect,url_for
+from werkzeug.utils import secure_filename
+from django.http import HttpResponse
+import os
+
+app = Flask(__name__)
+
+@app.route('/upload', methods=['POST', 'GET'])
+def upload():
+    if request.method == 'POST':
+        f = request.files['file']
+        basepath = os.path.dirname(__file__)  # 当前文件所在路径
+        upload_path = os.path.join(basepath, 'static/uploads',secure_filename(f.filename))  #注意：没有的文件夹一定要先创建，不然会提示没有该路径
+        f.save(upload_path)
+        #return redirect(url_for('upload'))
+        print('上传成功!')
+    return render_template('upload.html')
+
+
+@app.route('/up', methods=['POST', 'GET'])
+def upload_file():
+    if request.method == "POST":  # 请求方法为POST时，进行处理
+        myFile = request.FILES.get("myfile", None)  # 获取上传的文件，如果没有文件，则默认为None
+        if not myFile:
+            return HttpResponse("no files for upload!")
+        destination = open(os.path.join("/upload", myFile.name), 'wb+')  # 打开特定的文件进行二进制的写操作
+        for chunk in myFile.chunks():  # 分块写入文件
+            destination.write(chunk)
+        destination.close()
+        return HttpResponse(myFile.name)
+    return render_template('up.html')
+
+
+if __name__ == '__main__':
+    app.run('0.0.0.0',debug=True)

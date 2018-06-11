@@ -22,34 +22,80 @@
 			overflow: hidden;
         }
 		  th{
-              text-align: center;
+            text-align: center;
+            <!--font-family:Microsoft yahei;-->
+            <!--font-size:36px;-->
+            <!--font-weight:bold;-->
+            <!--color:#000-->
         }
 
 	  </style>
+ <script src="static/js/jquery-3.2.1.min.js"></script>
+          <script>
+              function toVaild(){
+                  var val_name = document.addConference.name.value;
+                  var val_date = document.addConference.date.value;
+                  var val_place = document.addConference.place.value;
+                  var val_duration = document.addConference.duration.value;
+                  var val_intro = document.addConference.introduction.value;
+                  var val_host = document.addConference.host.value;
+                  var val_guestintro = document.addConference.guest_intro.value;
+                  var val_remark = document.addConference.remark.value;
+                  var val_file = document.addConference.file.value;
+
+                  if(!val_file || !val_name || !val_date || !val_duration || !val_intro || !val_host || !val_guestintro || !val_remark){
+                      alert("请先填写所有内容并上传海报");
+                      return false;
+                  }
+                  else{
+                      return true;
+                  }
+              }
+          </script>
+
   </head>
   <body>
   	<div class="container">
   		<div class="page-header">
-  			{% if user %}
-			<h1>Hello, {{user.username}}! <small>发布、管理您的会议</small></h1>
+  			{% if g.user.is_authenticated %}
+			<h1>Hello, {{g.user.username}}! <small>发布、管理您的会议</small></h1>
 			{% else %}
 			<h1>Hello! <small>发布、管理您的会议</small></h1>
+
 			{% endif %}
 		</div>
 
 		<ul class="nav nav-tabs">
-			<li role="presentation" id="/index"><a href="index">Home</a></li>
-			<li role="presentation" id="/add_conference"><a href="add_conference">发布会议</a></li>
-			<li role="presentation" id="/previewlist"><a href="previewlist">预览</a></li>
-			<li role="presentation"><a href="#">Others</a></li>
+			<li role="presentation" id="/index"><a href="{{url_for('index')}}">Home</a></li>
+			<li role="presentation" id="/add_conference"><a href="{{url_for('add_conference',conference_id=0)}}">发布会议</a></li>
+			<li role="presentation" id="/previewlist"><a href="{{url_for('previewlist')}}">预览</a></li>
+		    {% if g.user.is_authenticated %}
+			    <li role="presentation" id="/logout"><a href="{{url_for('logout')}}">注销</a></li>
+            {% else %}
+                <li role="presentation" id="/login"><a href="{{url_for('login')}}">登录</a></li>
+			    <li role="presentation" id="/register"><a href="{{url_for('register')}}">注册</a></li>
+	        {% endif %}
 			{% if tag %}
 			<!-- 获取当前页面路径，设置标签页active -->
-			<script type="text/javascript">
-				var test = window.location.pathname;
-				document.getElementById(test).setAttribute("class","active");
-			</script>
+    			<script type="text/javascript">
+    				var test = window.location.pathname;
+    				document.getElementById(test).setAttribute("class","active");
+    			</script>
 			{% endif %}
 		</ul>
+		
+		<br>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    {% if category == 'message' %}
+                        <div class="alert alert-warning" role="alert">{{ msg }}</div>
+                    {% else %}
+                        <div class="alert alert-{{category}}" role="alert">{{ msg }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
 		{% block content %}{% endblock %}
 	</div>

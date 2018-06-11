@@ -1,20 +1,46 @@
 {% extends "base.html" %}
 {% block content %}
     <br><br>
-    <form name="addConference" action="" method="post">
+    {% if not is_success %}
+    <form name="addConference" action="" method="post" enctype='multipart/form-data'  onsubmit="toVaild()" >
         {{form.hidden_tag() }}
         <p>
-            会议名称: {{form.name(size=48)}}<br><br>
+            会议名称: {{form.name(size=50)}}<br><br>
         </p>
         <p>
-            会议时间: {{form.date}} &nbsp;&nbsp;&nbsp;&nbsp;  <em>格式：<mark>yyyy-mm-dd hh:mm:ss</mark></em>
+            会议时间: {{form.date(type="datetime-local")}} &nbsp;&nbsp;&nbsp;&nbsp;  <em>格式：<mark>年/月/日 时：分</mark></em>
             <br><br>
         </p>
         <p>
-            会议地点: {{form.place(size=48)}}<br><br>
+            会议时长: {{form.duration(type="time")}} &nbsp;&nbsp;&nbsp;&nbsp;  <em>格式：<mark> 时：分</mark></em>
+            <br><br>
         </p>
         <p>
-            <input type="submit" name="提交">
+            会议地点: {{form.place(size=50)}}<br><br>
+        </p>
+        <p>
+            会议简介: {{form.introduction(style="height:200px;width:400px;resize:none;vertical-align:top;")}}<br><br>
+        </p>
+        <p>
+            会议主持: {{form.host(size=50)}}<br><br>
+        </p>
+        <p>
+            会议嘉宾: {{form.guest_intro(style="height:200px;width:400px;resize:none;vertical-align:top;")}}<br><br>
+        </p>
+        <p>
+            会议备注: {{form.remark(style="height:200px;width:400px;resize:none;vertical-align:top;")}}<br><br>
+        </p>
+        <p>
+{#    <form action="" enctype='multipart/form-data' method='POST'>#}
+            海报上传：
+            <input type="file" name="file" class="btn btn-default"><em>图片名请不要包含中文字符</em>
+{#            <input type="submit" value="提交">#}
+{#    </form>#}
+        </p>
+        <p>{{form.submit(class="btn btn-default")}}
         </p>
     </form>
+    {% else %}
+    <h3>会议发布成功！</h3>
+    {% endif %}
 {% endblock %}

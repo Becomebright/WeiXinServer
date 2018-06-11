@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>jQuery File Upload Example</title>
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+<form action="/upload_ajax/" enctype="multipart/form-data" method="POST">
+
+    <input type="file" id="file"/>
+</form>
+
+<button id="btn">上传</button>
+
+<div class="progress" style="width: 500px">
+    <div id="progress-bar" class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+         aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+        <span class="sr-only">40% Complete (success)</span>
+    </div>
+</div>
+
+<script src="/static/js/jquery-1.9.1.min.js"></script>
+<script>
+    $(function () {
+        $("#btn").on('click', function () {
+            UploadFile();
+        });
+
+        $("#file").change(function () {
+            $("#progress-bar").css("width", 0);
+        });
+
+        // ajax + jQuery上传
+        function UploadFile() {
+            var xhrOnProgress = function (fun) {
+                xhrOnProgress.onprogress = fun; //绑定监听
+                //使用闭包实现监听绑
+                return function () {
+                    //通过$.ajaxSettings.xhr();获得XMLHttpRequest对象
+                    var xhr = $.ajaxSettings.xhr();
+                    //判断监听函数是否为函数
+                    if (typeof xhrOnProgress.onprogress !== 'function')
+                        return xhr;
+                    //如果有监听函数并且xhr对象支持绑定时就把监听函数绑定上去
+                    if (xhrOnProgress.onprogress && xhr.upload) {
+                        xhr.upload.onprogress = xhrOnProgress.onprogress;
+                    }
+                    return xhr;
+                }
+            }
+
+            var file = $("#file")[0].files[0];
+            var form = new FormData();
+            form.append('myfile', file);
+            form.append("csrfmiddlewaretoken", '{{ csrf_token }}');
+            $.ajax({
+                type: 'POST',
+                url: '/up',
+                data: form,
+                processData: false,  // 告诉jquery不转换数据
+                contentType: false,  // 告诉jquery不设置内容格式
+                xhr: xhrOnProgress(function (e) {
+                    var percent = e.loaded / e.total;
+                    $("#progress-bar").css("width", (percent * 500));
+                }),
+
+                success: function (arg) {
+                    console.log(arg);
+
+                }
+            })
+        }
+    });
+</script>
+</body>
+</html>

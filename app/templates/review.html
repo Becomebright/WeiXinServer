@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+    <p>
+        <!-- 会议名称作标题 -->
+        <table width="100%">
+            <tr align="center">
+                <td>
+                    <table  width="60%">
+                        <thead>
+                            <tr>
+                                <th><h1>{{ conference.name }}——发表会议回顾</h1></th>
+                                <!--会议名称-->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                <br>
+                                <form id="review" name="review" method="post">
+                                    {{ form.csrf_token }}
+                                    <label>会议回顾：</label>
+                                    <textarea id="review" name="review" style="width:700px;height:200px; resize:none" required>{{ conference.review }}</textarea>
+                                    <input type="hidden" id=review name=review/>
+                                    <label>视频id：</label>
+                                    <textarea id=vid name=vid style="width:700px;height:30px;resize:none"></textarea>
+                                    <input type="hidden" id=vid name=vid />
+                                    <input type="submit" value="提交" id="submit" name="submit" onclick="return preSave();" class="btn btn-primary" />
+                                </form>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td><br><br></td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label>上传文件</label>
+                                    <form action="" enctype='multipart/form-data' method='POST'>
+                                        <input type="file" name="file" class="btn btn-default">
+                                        <br>
+                                        <input type="submit" value="上传" class="btn btn-primary">
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <br>
+                                    <lable><strong>文件列表：</strong></lable>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <ul class="list-group">
+                                    {% for doc in docs %}
+                                    <li class="list-group-item"><a href="{{doc.url}}" target="_blank">{{ doc.filename }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+    </p>
+
+{% endblock %}

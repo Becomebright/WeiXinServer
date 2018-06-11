@@ -7,27 +7,42 @@
             <thead>
                     <tr style="background-color: whitesmoke" align="center">
                         <th width="70">会议名称</th>
-                        <th width="70">会议地点</th>
+                        <th width="50">会议地点</th>
                         <th width="50">会议开始时间</th>
                         <th width="40">会议时长</th>
                         <th width="40">会议状态</th>
-                        <th width="100">会议嘉宾</th>
                         <th width="50">详细内容</th>
+                        <th width="50">报名审核</th>
+                        <th width="50">会议回顾</th>
                     </tr>
             </thead>
             <tbody>
+            {% for conference in conferences %}
                 <tr align="center">
-                    <td>html加冕礼</td>
-                    <td>行政办公楼三楼会议室</td>
-                    <td>2018-5-16 15:30:00</td>
-                    <td>3小时</td>
-                    <td>待发布</td>
-                    <td>姜局，平行宇宙守护者，银河系元老级法师，凹凸曼带盐人，塞博坦星大祭司</td>
-                    <td><a href="preview">详细信息</a></td>
+                    <td>{{ conference.name}}</td>
+                    <td>{{ conference.place }}</td>
+                    <td>{{ conference.date }}</td>
+                    <td>{{ conference.duration }}</td>
+                    <td>{{ conference.status }}</td>
+                    <td><a href="{{ url_for('preview', conference_id=conference.id)}}">详细信息</a></td>
+                    <td><a href="{{ url_for('examine', conference_id=conference.id)}}">审核</a></td>
+                    {% if conference.status == '已结束' %}
+                        {% if conference.review %}
+                        <td><a href="{{ url_for('review', conference_id=conference.id)}}">查看回顾</a></td>
+                        {% else %}
+                        <td><a href="{{ url_for('review', conference_id=conference.id)}}">发表回顾</a></td>
+                        {% endif %}
+                    {% else %}
+                        <td>会议尚未结束</td>
+                    {% endif %}
                 </tr>
+            {% endfor %}
 
             </tbody>
         </table>
+{#    {% for conference in conferences %}#}
+{#                <p>{{conference.name}} </p>#}
+{#    {% endfor %}#}
     </p>
     <p>
 

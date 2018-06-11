@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+    <p>
+        <!-- 会议名称作标题 -->
+        <table width="100%">
+            <tr align="center">
+                <td>
+                    <table  width="60%" >
+                        <thead>
+                            <tr>
+                                <th><h1>{{ conference.name }}</h1></th>
+                                <!--会议名称-->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {% if conference.introduction %}
+                                <td><h4><b>会议简介：</b><br><br>{{ conference.introduction }}</h4></td>
+                                <!--会议简介-->
+                                {% endif %}
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+    </p>
+    <table class="table table-hover" width="80%">
+        <thead>
+            <tr align="center">
+                <th><strong>#</strong></th>
+                <th><strong>报名人员</strong></th>
+                <th><strong>审核</strong></th>
+            </tr>
+        </thead>
+
+        {% for u in users %}
+        <tr align="center">
+            <td>{{loop.index}}</td>
+            <td>{{ u.name }}</td>        
+            <td>
+                {% set bt1_class = "" %}
+                {% set bt1_class = "" %}
+                {% if u.status == 1 %}
+                    {% set bt1_class = "disabled" %}
+                {% elif u.status == 2 %}
+                    {% set bt2_class = "disabled" %}
+                {% endif %}
+                <a href="{{ url_for( 'accept_enroll', conference_id=conference.id, user_id=u.id ) }}" class="btn btn-success {{bt1_class}}">通过</a>
+                <a href="{{ url_for( 'refuse_enroll', conference_id=conference.id, user_id=u.id ) }}" class="btn btn-danger {{bt2_class}}">拒绝</a>
+            </td>    
+        </tr>
+        {% endfor %}
+
+    </table>
+    
+{% endblock %}
