@@ -54,7 +54,7 @@
                                 <td>
                                 <ul class="list-group">
                                     {% for doc in docs %}
-                                        <li class="list-group-item">{{ doc.filename }}</li>
+                                    <li class="list-group-item"><a href="{{doc.url}}" target="_blank">{{ doc.filename }}</a></li>
                                     {% endfor %}
                                 </ul>
                                 </td>
