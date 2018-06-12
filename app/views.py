@@ -16,7 +16,7 @@ import os
 Bootstrap(app)
 
 
-# @app.route('/')
+@app.route('/')
 @app.route('/index')
 def index():
     tag = {'name': 'index'}

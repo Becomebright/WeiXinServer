@@ -11,3 +11,5 @@ db_repository
 app/test.py
 migrations
 app/static/uploads/
+*.crt
+*.key
