@@ -32,6 +32,8 @@
                         {% else %}
                         <td><a href="{{ url_for('review', conference_id=conference.id)}}">发表回顾</a></td>
                         {% endif %}
+                    {% elif conference.status == '未发布' %}
+                        <td>会议尚未发布</td>
                     {% else %}
                         <td>会议尚未结束</td>
                     {% endif %}
