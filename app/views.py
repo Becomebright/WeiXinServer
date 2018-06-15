@@ -235,7 +235,7 @@ def review(conference_id):
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash(message='本次提交未上传文件', category='info')
+            flash(message='提交回顾内容成功', category='info')
             return redirect(request.url)
         f = request.files['file']
         # if user does not select file, browser also
