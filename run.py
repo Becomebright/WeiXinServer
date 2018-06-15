@@ -7,4 +7,4 @@ app.run(host='0.0.0.0'
     "1_dszdsz.cn_bundle.crt",
     "2_dszdsz.cn.key")
 )
-# app.run(host='0.0.0.0',debug=True)
+# app.run(debug=True)

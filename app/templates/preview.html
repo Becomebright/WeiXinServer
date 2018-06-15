@@ -55,22 +55,15 @@
                                 {% endif %}
                             </tr>
                             <tr>
-                                <div class="btn-group btn-group-lg" aria-label="...">
                                     <td align="center">
-                                        {% set publish_class = "" %}
-                                        {% if conference.status=="已发布"%}
-                                        {% set publish_class = "disabled" %}
-                                        {% endif %}
-                                        {% set change_class = "" %}
-                                        {% if conference.status=="已结束"%}
-                                        {% set change_class = "disabled" %}
-                                        {% endif %}
-                                        {% if conference.status!="已结束" %}
-                                        <a type="button" class="btn btn-info{{ change_class }}"  href = "{{ url_for('add_conference', conference_id=conference.id)}}">修改信息</a>
-                                        <a type="button" class="btn btn-info{{ publish_class }}" href = "{{ url_for('publish', conference_id=conference.id)}}">发布会议</a>
+                                        {% if conference.status == "已发布"%}
+                                        <a class="btn btn-info"  href = "{{ url_for('add_conference', conference_id=conference.id)}}">修改信息</a>
+                                        <a disabled="disabled" class="btn btn-info" href = "{{ url_for('publish', conference_id=conference.id)}}">发布会议</a>
+                                        {% elif conference.status == "未发布"%}
+                                        <a class="btn btn-info"  href = "{{ url_for('add_conference', conference_id=conference.id)}}">修改信息</a>
+                                        <a class="btn btn-info" href = "{{ url_for('publish', conference_id=conference.id)}}">发布会议</a>
                                         {% endif %}
                                     </td>
-                                </div>
                             </tr>
                         </tbody>
                     </table>
