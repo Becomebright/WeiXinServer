@@ -57,7 +57,7 @@ def add_conference(conference_id):
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash(message='本次提交未上传海报', category='info')
+            # flash(message='本次提交未上传海报', category='info')
             return render_template('add_conference.html', user=user, form=form, tag=tag, is_success=False)
         f = request.files['file']
         # if user does not select file, browser also
@@ -128,18 +128,15 @@ def add_conference(conference_id):
 @app.route('/previewlist')
 @login_required
 def previewlist():
-    if current_user.is_anonymous:
-        user = None
-    else:
-        user = current_user
+    user = current_user
     tag = {'name': 'previewlist'}
-    for conference in Conference.query.all():
+    for conference in Conference.query.filter_by(admin_id=user.id).all():
         if conference.status == '已发布':
             now = datetime.datetime.now()
             if now > conference.date + conference.duration:
                 conference.status = '已结束'
                 db.session.commit()
-    conferences = Conference.query.order_by(db.desc(Conference.id)).all()
+    conferences = Conference.query.filter_by(admin_id=user.id).order_by(db.desc(Conference.id)).all()
     return render_template('previewlist.html', user=user, tag=tag, conferences=conferences)
 
 
@@ -293,12 +290,13 @@ def get_conferences():
         print('not json')
         abort(400)
     username = request.json['username']
+    admin_id = request.json['admin_id']
     user = User.query.filter_by(username=username).first()
     if user is None:
         user = User(username=username)
         db.session.add(user)
         db.session.commit()
-    conferences = Conference.query.order_by(db.desc(Conference.id)).all()
+    conferences = Conference.query.filter_by(admin_id=admin_id).order_by(db.desc(Conference.id)).all()
     confs_dict = []
     for conf in conferences:
         conf_dict = get_conf_dict(conf, user)
