@@ -235,7 +235,7 @@ def review(conference_id):
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash(message='本次提交未上传文件', category='info')
+            flash(message='提交回顾内容成功', category='info')
             return redirect(request.url)
         f = request.files['file']
         # if user does not select file, browser also
@@ -290,13 +290,12 @@ def get_conferences():
         print('not json')
         abort(400)
     username = request.json['username']
-    admin_id = request.json['admin_id']
     user = User.query.filter_by(username=username).first()
     if user is None:
         user = User(username=username)
         db.session.add(user)
         db.session.commit()
-    conferences = Conference.query.filter_by(admin_id=admin_id).order_by(db.desc(Conference.id)).all()
+    conferences = Conference.query.order_by(db.desc(Conference.id)).all()
     confs_dict = []
     for conf in conferences:
         conf_dict = get_conf_dict(conf, user)
