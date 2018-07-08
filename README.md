@@ -1,11 +1,9 @@
 # ConferenceServer
-**Web server for a WeiXin conference app, powered by Python Flask**
+**A Web server for a WeiXin conference mini program, powered by Python Flask**
 
 
 
-[TOC]
-
-## 配置方式
+## Configuration
 
 - Python 3.5
 
@@ -21,9 +19,9 @@
   - Flask-WTF
   - Jinja2
 
-- 在`app`文件夹下创建`static/uploads`文件夹
+- Create subdirectory `static/uploads` under `app` directory, that is you need to first create a directory `static` under `app`, then create a directory `uploads` under `static`
 
-- 在`WeiXinServer`文件夹下创建数据库：
+- Create database under `WeiXinServer` directory：
 
   ```
   flask db init
@@ -31,17 +29,16 @@
   flask db upgrade
   ```
 
-- 在`WeiXinServer`文件夹下启动服务器：`python run.py`
+- Run server in the background under `WeiXinServer` directory：`nohup python run.py &`
+  - The logs will be stored at `nohup.out`
 
-## V1.0
+## V1.1
 
-- 登录 / 注册 / 注销
-- 添加会议
-- 预览会议
-- 查看会议详情 / 修改会议
-- 审核报名人员
-- 发布 / 查看会议回顾
-- 文件上传 / 下载
-- 与小程序端的交互
-
-备注：数据库维护使用`flask-migrate`，原先`db`文件夹下的脚本
+- Log in / Register / Log out
+- Add conference
+- Preview conference
+- Check conference detail / Amend conference
+- Verify enrollment
+- Publish / Check conference review
+- Document uploads / downloads
+- Interact with WeiXin mini program
