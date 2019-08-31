@@ -11,5 +11,6 @@ db_repository
 app/test.py
 migrations
 app/static/uploads/*
+!app/static/uploads/.gitkeep
 *.crt
 *.key
