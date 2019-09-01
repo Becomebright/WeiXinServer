@@ -63,6 +63,7 @@
                                         <a class="btn btn-info"  href = "{{ url_for('add_conference', conference_id=conference.id)}}">修改信息</a>
                                         <a class="btn btn-info" href = "{{ url_for('publish', conference_id=conference.id)}}">发布会议</a>
                                         {% endif %}
+                                        <a class="btn btn-info"  href = "{{ url_for('download_pdf', conference_id=conference.id)}}">下载pdf</a>
                                     </td>
                             </tr>
                         </tbody>

@@ -3,7 +3,7 @@ import datetime
 from urllib.parse import urlparse, urljoin
 
 import os
-from flask import render_template, redirect, url_for, flash, request, abort, jsonify, g, send_from_directory
+from flask import render_template, redirect, url_for, flash, request, abort, jsonify, g, send_from_directory, send_file
 from flask_login import login_required, login_user, current_user, logout_user
 from flask_bootstrap import Bootstrap
 
@@ -11,7 +11,7 @@ from app import app, login_manager, ALLOWED_EXTENSIONS
 from app.forms import *
 from app.models import *
 from werkzeug.utils import secure_filename
-import os
+from app.get_conf_pdf import get_conf_pdf
 
 Bootstrap(app)
 
@@ -101,7 +101,7 @@ def add_conference(conference_id):
             conference = Conference(admin_id=admin_id, name=name, date=date, place=place, duration=duration,
                                 introduction=introduction, host=host, guest_intro=guest_intro, remark=remark,
                                 status=status, create_time=create_time, image=file_url)
-            print(conference.to_dict())
+            # print(conference.to_dict())
             db.session.add(conference)
             db.session.commit()
         else:
@@ -248,7 +248,7 @@ def review(conference_id):
             filename = secure_filename(f.filename)
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename).replace('\\', '/'))
             file_url = 'https://dszdsz.cn/static' + url_for('uploaded_file', filename=filename)
-            print(file_url)
+            # print(file_url)
 
             if Document.query.filter_by(filename=filename).first() is not None:
                 flash(message='文件名重复', category='info')
@@ -287,7 +287,7 @@ def get_conf_dict(conf, user):
 def get_conferences():
     print(request.get_data())
     if not request.json or 'username' not in request.json:
-        print('not json')
+        # print('not json')
         abort(400)
     username = request.json['username']
     user = User.query.filter_by(username=username).first()
@@ -301,7 +301,7 @@ def get_conferences():
         conf_dict = get_conf_dict(conf, user)
         if conf_dict['status'] is not '未发布':
             confs_dict.append(conf_dict)
-    print(confs_dict)
+    # print(confs_dict)
     return jsonify(confs_dict)
 
 
@@ -309,7 +309,7 @@ def get_conferences():
 def get_conference_detail():
     print(request.get_data())
     if not request.json or 'username' not in request.json:
-        print('not json')
+        # print('not json')
         abort(400)
     username = request.json['username']
     conference_id = request.json['conference_id']
@@ -501,4 +501,16 @@ def publish(conference_id):
     else:
         conference.status = '已发布'
         db.session.commit()
+    return redirect(url_for('preview',conference_id=conference_id))
+
+
+@app.route('/download_pdf/<conference_id>', methods=['GET','POST'])
+def download_pdf(conference_id):
+    conference = Conference.query.get(conference_id)
+    if conference is None:
+        flash(message='会议不存在!', category='danger')
+    else:
+        filename = get_conf_pdf(conference)
+        return send_file(filename, as_attachment=True)
+        # return send_from_directory(path, filename, as_attachment=True)
     return redirect(url_for('preview',conference_id=conference_id))
